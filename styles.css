@@ -1116,3 +1116,9 @@ header::before {
         border-radius: 0;
     }
 }
+@media (max-width: 768px) {
+    .scroll-reveal {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
