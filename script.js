@@ -191,20 +191,23 @@ function closeModal() {
 
 function initScrollReveal() {
     const revealElements = document.querySelectorAll('.scroll-reveal');
-    
+
+    // ✅ MOBILE FALLBACK (CRITICAL)
+    if (window.innerWidth <= 768) {
+        revealElements.forEach(el => {
+            el.classList.add('revealed');
+        });
+        console.log('📱 Scroll reveal disabled on mobile (forced reveal)');
+        return;
+    }
+
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry, index) => {
             if (entry.isIntersecting) {
-                // Stagger animation
                 setTimeout(() => {
                     entry.target.classList.add('revealed');
                 }, index * 100);
-                
-                // Fade out when scrolling up past element
                 entry.target.dataset.revealed = 'true';
-            } else if (entry.target.dataset.revealed === 'true') {
-                // Optional: fade out when scrolling past
-                // entry.target.classList.remove('revealed');
             }
         });
     }, {
@@ -212,12 +215,9 @@ function initScrollReveal() {
         rootMargin: '0px 0px -100px 0px'
     });
 
-    revealElements.forEach(element => {
-        revealObserver.observe(element);
-    });
-
-    console.log(`✨ Scroll reveal initialized for ${revealElements.length} elements`);
+    revealElements.forEach(el => revealObserver.observe(el));
 }
+
 
 // ============================================
 // PROJECT FILTERING
@@ -258,6 +258,15 @@ function initProjectFilters() {
     });
 
     console.log('✅ Project filters initialized');
+    // ✅ Ensure projects visible on first load
+const defaultBtn = document.querySelector('.filter-btn[data-filter="all"]');
+if (defaultBtn) {
+    defaultBtn.classList.add('active');
+}
+
+projectCards.forEach(card => card.classList.remove('hidden'));
+
+
 }
 
 // Add animation keyframes
@@ -451,19 +460,18 @@ function initImageLoading() {
 // ============================================
 
 function initParallax() {
+    // ❌ Disable parallax on mobile for performance & visibility
+    if (window.innerWidth <= 768) return;
+
     const bgPattern = document.querySelector('.bg-pattern');
-    
     if (!bgPattern) return;
 
     const handleParallax = debounce(() => {
         const scrolled = window.pageYOffset;
-        const rate = scrolled * 0.3;
-        
-        bgPattern.style.transform = `translateY(${rate}px)`;
+        bgPattern.style.transform = `translateY(${scrolled * 0.3}px)`;
     }, 10);
 
     window.addEventListener('scroll', handleParallax, { passive: true });
-    console.log('✅ Parallax effect initialized');
 }
 
 // ============================================
