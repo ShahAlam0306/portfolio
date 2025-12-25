@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Analyst Portfolio</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/icon.png">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Background Pattern Overlay -->
+    <div class="bg-pattern"></div>
+
+    <div class="container">
+        <!-- Professional Hero Section (ISSUE #4 FIXED - On Top) -->
+        <header class="scroll-reveal">
+            <div class="hero-content">
+                <!-- Hero Layout: Image Left, Info Right -->
+                <div class="hero-layout">
+                    <!-- Left: Profile Image -->
+                    <div class="hero-image-section">
+                        <div class="hero-image">
+                            <img src="assets/profile_pic.jpg" alt="Rayeen Shahalam" class="profile-img">
+                            <div class="welcome-badge">
+                                <i class="fas fa-briefcase"></i> Data Analyst
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Professional Info -->
+                    <div class="hero-info-section">
+                        <h1>Rayeen Shahalam</h1>
+                        <p class="hero-tagline">Transforming Raw Data into Strategic Business Intelligence</p>
+                        
+                        <div class="hero-about">
+                            <p class="about-summary">Results-driven Data Analyst with expertise in transforming complex datasets into actionable business insights. Proficient in SQL, Python, Power BI, and statistical analysis.</p>
+                            
+                            <!-- Tech Stack Badges -->
+                            <div class="tech-stack">
+                                <span class="tech-badge"><i class="fab fa-python"></i> Python</span>
+                                <span class="tech-badge"><i class="fas fa-database"></i> SQL</span>
+                                <span class="tech-badge"><i class="fas fa-chart-line"></i> Power BI</span>
+                                <span class="tech-badge"><i class="fas fa-file-excel"></i> Excel</span>
+                                <span class="tech-badge"><i class="fas fa-chart-bar"></i> Statistics</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="main-nav">
+                    <a href="#resume"><i class="fas fa-user"></i> About Me</a>
+                    <a href="#projects"><i class="fas fa-laptop-code"></i> Projects</a>
+                    <a href="#appreciation"><i class="fas fa-star"></i> Testimonials</a>
+                    <a href="#certificates"><i class="fas fa-certificate"></i> Certifications</a>
+                    <a href="#contact"><i class="fas fa-envelope"></i> Contact</a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Resume/About Me Section -->
+        <div class="section scroll-reveal" id="resume">
+            <h2><i class="fas fa-user-circle"></i> About Me</h2>
+            <div class="resume-preview">
+                <div class="resume-section">
+                    <h4><i class="fas fa-code"></i> Technical Skills</h4>
+                    <ul>
+                        <li><strong>Programming & Querying:</strong> Python (Pandas, NumPy, Matplotlib), SQL</li>
+                        <li><strong>Data Visualization & Reporting:</strong> Power BI, Microsoft Excel</li>
+                        <li><strong>Data Processing & Transformation:</strong> Power Query, ETL processes</li>
+                        <li><strong>Analytics & Methods:</strong> Descriptive statistics, predictive modeling, A/B testing</li>
+                    </ul>
+                </div>
+
+                <div class="resume-section">
+                    <h4><i class="fas fa-briefcase"></i> Professional Experience</h4>
+                    <p><strong>Deloitte Australia – Data Analytics Job Simulation (Forage)</strong> | October 2025</p>
+                    <ul>
+                        <li>Performed data analysis tasks involving forensic technology and business problem-solving.</li>
+                        <li>Developed interactive dashboards using Tableau to communicate analytical insights.</li>
+                        <li>Utilized Microsoft Excel to clean, classify, and analyze datasets for decision-making.</li>
+                        <li>Interpreted data trends and translated findings into actionable business conclusions.</li>
+                    </ul>
+                </div>
+
+                <div class="resume-section">
+                    <h4><i class="fas fa-graduation-cap"></i> Education</h4>
+                    <p><strong>Bachelor of Science in Information Technology (B.Sc IT) - Rizvi College</strong></p>
+                    <p>Currently in Second Year - Expected Graduation: 2027</p>
+                    <br>
+                    <p><strong>Professional Development</strong></p>
+                    <p>Continuously enhancing data analyst skills through SkillCourse certifications and hands-on projects</p>
+                </div>
+            </div>
+            <div class="button-group">
+                <a href="assets/Shahalam_Resume.pdf" class="download-btn" download="Rayeen Shahalam Resume">
+                    <i class="fas fa-download"></i> Download Resume
+                </a>
+                <a href="assets/Shahalam_Resume.pdf" class="download-btn secondary" target="_blank">
+                    <i class="fas fa-eye"></i> View Resume
+                </a>
+            </div>
+        </div>
+
+        <!-- Projects Section with Filters -->
+        <div class="section scroll-reveal" id="projects">
+            <h2><i class="fas fa-laptop-code"></i> Projects Portfolio</h2>
+            
+            <!-- Project Filters -->
+            <div class="project-filters">
+                <button class="filter-btn active" data-filter="all">
+                    <i class="fas fa-th"></i> All Projects
+                </button>
+                <button class="filter-btn" data-filter="powerbi">
+                    <i class="fas fa-chart-line"></i> Power BI
+                </button>
+                <button class="filter-btn" data-filter="python">
+                    <i class="fab fa-python"></i> Python
+                </button>
+                <button class="filter-btn" data-filter="sql">
+                    <i class="fas fa-database"></i> SQL
+                </button>
+                <button class="filter-btn" data-filter="dashboard">
+                    <i class="fas fa-tachometer-alt"></i> Dashboards
+                </button>
+            </div>
+
+            <div class="projects-grid">
+                <div class="project-card" data-category="powerbi dashboard">
+                    <div class="project-image">
+                        <img src="projects/instamart-dashboard.jpg" alt="Instamart Sales Dashboard"
+                            onerror="this.src='https://via.placeholder.com/400x250/667eea/ffffff?text=Instamart+Dashboard'">
+                    </div>
+                    <div class="project-content">
+                        <h3>Instamart Sales Analysis Dashboard</h3>
+                        <p>Developed an interactive Power BI dashboard analyzing sales trends across multiple regions. Implemented KPI tracking and predictive forecasting models.</p>
+                        <p><strong>Tools:</strong> Power BI, Excel</p>
+                    </div>
+                    <a href="https://github.com/ShahAlam0306/Instamart-Sales-Analysis-Dashboard" target="_blank" class="project-btn">
+                        <i class="fab fa-github"></i> View on GitHub
+                    </a>
+                </div>
+
+                <div class="project-card" data-category="python sql dashboard">
+                    <div class="project-image">
+                        <img src="projects/food_delivery_dashboard.jpg" alt="Food Delivery Dashboard"
+                            onerror="this.src='https://via.placeholder.com/400x250/667eea/ffffff?text=Food+Delivery+Dashboard'">
+                    </div>
+                    <div class="project-content">
+                        <h3>Food Delivery Sales Dashboard</h3>
+                        <p>Provides clear and actionable insights into delivery performance, helping businesses track trends and make data-driven decisions efficiently.</p>
+                        <p><strong>Tools:</strong> Excel, powerbi</p>
+                    </div>
+                    <a href="https://github.com/ShahAlam0306/Food-delivery-sales-Dashboard" target="_blank" class="project-btn">
+                        <i class="fab fa-github"></i> View on GitHub
+                    </a>
+                </div>
+
+                <div class="project-card" data-category="powerbi dashboard sql python">
+                    <div class="project-image">
+                        <img src="projects/customer-behavior-dashboard.jpg" alt="Customer Behavior Dashboard"
+                            onerror="this.src='https://via.placeholder.com/400x250/667eea/ffffff?text=Customer+Behavior'">
+                    </div>
+                    <div class="project-content">
+                        <h3>Customer Behavior Analysis Dashboard</h3>
+                        <p>Interactive Power BI dashboard analyzing customer behavior, purchasing patterns, and revenue trends to understand customer insights.</p>
+                        <p><strong>Tools:</strong> Power BI, DAX, SQL, Python</p>
+                    </div>
+                    <a href="https://github.com/ShahAlam0306/Customer_behaioir-analysis" target="_blank" class="project-btn">
+                        <i class="fab fa-github"></i> View on GitHub
+                    </a>
+                </div>
+
+                <div class="project-card" data-category="powerbi dashboard">
+                    <div class="project-image">
+                        <img src="projects/motorola_dashboard.jpg" alt="Motorola Sales Dashboard"
+                            onerror="this.src='https://via.placeholder.com/400x250/667eea/ffffff?text=Motorola+Dashboard'">
+                    </div>
+                    <div class="project-content">
+                        <h3>Motorola Sales Dashboard</h3>
+                        <p>Interactive Power BI dashboard analyzing Motorola's mobile sales across various cities in India with comprehensive insights.</p>
+                        <p><strong>Tools:</strong> Power BI, Excel, DAX</p>
+                    </div>
+                    <a href="https://www.linkedin.com/in/shahalam-rayeen-104435319/recent-activity/all/" target="_blank" class="project-btn">
+                        <i class="fab fa-linkedin"></i> View on LinkedIn
+                    </a>
+                </div>
+
+                <div class="project-card" data-category="python">
+                    <div class="project-image">
+                        <img src="projects/eda_customer.jpg" alt="Customer Behavior EDA"
+                            onerror="this.src='https://via.placeholder.com/400x250/667eea/ffffff?text=Customer+EDA'">
+                    </div>
+                    <div class="project-content">
+                        <h3>Customer Behavior Analysis (EDA)</h3>
+                        <p>Comprehensive exploratory data analysis of customer behavior using Python statistical methods and visualization techniques.</p>
+                        <p><strong>Tools:</strong> Python, Pandas, Matplotlib</p>
+                    </div>
+                    <a href="https://github.com/ShahAlam0306/EDA_projects/tree/main/Customer_behavior_analysis" target="_blank" class="project-btn">
+                        <i class="fab fa-github"></i> View on GitHub
+                    </a>
+                </div>
+
+                <div class="project-card" data-category="python">
+                    <div class="project-image">
+                        <img src="projects/eda_folder.jpg" alt="EDA Projects"
+                            onerror="this.src='https://via.placeholder.com/400x250/667eea/ffffff?text=EDA+Projects'">
+                    </div>
+                    <div class="project-content">
+                        <h3>EDA Projects Collection</h3>
+                        <p>Comprehensive collection of exploratory data analysis projects demonstrating various statistical and analytical techniques.</p>
+                        <p><strong>Tools:</strong> Python, NumPy, Pandas</p>
+                    </div>
+                    <a href="https://github.com/ShahAlam0306/EDA_projects/tree/main" target="_blank" class="project-btn">
+                        <i class="fab fa-github"></i> View on GitHub
+                    </a>
+                </div>
+
+                <div class="project-card" data-category="sql">
+                    <div class="project-image">
+                        <img src="projects/download.jfif" alt="Bookstore SQL"
+                            onerror="this.src='https://via.placeholder.com/400x250/667eea/ffffff?text=SQL+Project'">
+                    </div>
+                    <div class="project-content">
+                        <h3>Bookstore SQL Project</h3>
+                        <p>Demonstrates the use of PostgreSQL to build and analyze a relational database for a bookstore management system.</p>
+                        <p><strong>Tools:</strong> PostgreSQL, SQL</p>
+                    </div>
+                    <a href="https://github.com/ShahAlam0306/-Bookstore-SQL-Project/blob/main/README.md" target="_blank" class="project-btn">
+                        <i class="fab fa-github"></i> View on GitHub
+                    </a>
+                </div>
+
+                <div class="project-card coming-soon" data-category="all">
+                    <div class="project-content" style="padding: 2rem;">
+                        <h3><i class="fas fa-rocket"></i> More Projects Coming Soon!</h3>
+                        <p>I'm constantly working on new data analysis projects. Stay tuned for:</p>
+                        <p>• Real-time Data Analytics</p>
+                        <p>• Machine Learning Models</p>
+                        <p>• Business Intelligence Solutions</p>
+                        <p style="margin-top: 15px; font-style: italic;">Follow me on GitHub for updates! 🎯</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Appreciation Section -->
+        <div class="section scroll-reveal" id="appreciation">
+            <h2><i class="fas fa-star"></i> Testimonials & Appreciation</h2>
+
+            <div class="appreciation-card">
+                <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+                <p>"Great work! The customer segmentation and buying pattern insights are really well presented. Very actionable dashboard!"</p>
+                <p class="author">
+                    <i class="fab fa-linkedin"></i> The Data Town, LinkedIn Connection
+                </p>
+            </div>
+
+            <div class="appreciation-card">
+                <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+                <p>"Really loved your customer segmentation project! The way you applied statistical methods and presented the findings shows strong analytical thinking. Keep up the excellent work!"</p>
+                <p class="author">
+                    <i class="fab fa-linkedin"></i> Senior Data Scientist, LinkedIn Connection
+                </p>
+            </div>
+
+            <div class="appreciation-card">
+                <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+                <p>Congratulations Shahalam Rayeen 🎉.. Well Done ... All the very Best!</p>
+                <p class="author">
+                    <i class="fab fa-linkedin"></i> Founder - DataFam Mumbai | Ambassador and Team Leader
+                </p>
+            </div>
+        </div>
+
+        <!-- Certificates Section -->
+        <div class="section scroll-reveal" id="certificates">
+            <h2><i class="fas fa-certificate"></i> Professional Certifications</h2>
+            <div class="certificates-grid">
+                <div class="certificate-card" onclick="showCertificate('deloitte')">
+                    <div class="cert-icon"><i class="fas fa-award"></i></div>
+                    <h3>Deloitte Data Analytics</h3>
+                    <p>Job Simulation Certificate</p>
+                    <p><small>Issued: Oct 16, 2025</small></p>
+                    <button class="cert-btn">View Certificate</button>
+                </div>
+
+                <div class="certificate-card" onclick="showCertificate('excel')">
+                    <div class="cert-icon"><i class="fas fa-file-excel"></i></div>
+                    <h3>Microsoft Excel</h3>
+                    <p>Advanced Excel Certification</p>
+                    <p><small>Issued: Feb 11, 2025</small></p>
+                    <button class="cert-btn">View Certificate</button>
+                </div>
+
+                <div class="certificate-card" onclick="showCertificate('powerquery')">
+                    <div class="cert-icon"><i class="fas fa-table"></i></div>
+                    <h3>Power Query</h3>
+                    <p>Data Transformation Specialist</p>
+                    <p><small>Issued: Dec 22, 2025</small></p>
+                    <button class="cert-btn">View Certificate</button>
+                </div>
+
+                <div class="certificate-card" onclick="showCertificate('sql')">
+                    <div class="cert-icon"><i class="fas fa-database"></i></div>
+                    <h3>SQL Mastery</h3>
+                    <p>Advanced SQL for Data Analysis</p>
+                    <p><small>Issued: Oct 16, 2025</small></p>
+                    <button class="cert-btn">View Certificate</button>
+                </div>
+
+                <div class="certificate-card" onclick="showCertificate('python')">
+                    <div class="cert-icon"><i class="fab fa-python"></i></div>
+                    <h3>Python Mastery</h3>
+                    <p>Python for Data Analysis</p>
+                    <p><small>Issued: Sep 5, 2025</small></p>
+                    <button class="cert-btn">View Certificate</button>
+                </div>
+
+                <div class="certificate-card" onclick="showCertificate('statistics')">
+                    <div class="cert-icon"><i class="fas fa-chart-bar"></i></div>
+                    <h3>Statistics Mastery</h3>
+                    <p>Advanced Statistical Analysis</p>
+                    <p><small>Issued: Dec 19, 2025</small></p>
+                    <button class="cert-btn">View Certificate</button>
+                </div>
+
+                <div class="certificate-card" onclick="showCertificate('ai_data_analysis')">
+                    <div class="cert-icon"><i class="fas fa-robot"></i></div>
+                    <h3>AI in Data Analysis</h3>
+                    <p>AI & Machine Learning</p>
+                    <p><small>Issued: Dec 21, 2025</small></p>
+                    <button class="cert-btn">View Certificate</button>
+                </div>
+            </div>
+
+            <!-- Certificate Modal -->
+            <div id="certModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal()">&times;</span>
+                    <h2 class="modal-header" id="certTitle"></h2>
+                    <div class="certificate-image-container" id="certImageContainer"></div>
+                    <div class="modal-body" id="certDetails"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Section -->
+        <footer id="contact">
+            <div class="section contact-section scroll-reveal">
+                <h2><i class="fas fa-envelope"></i> Get In Touch</h2>
+
+                <!-- FAQ Section -->
+                <div class="faq-section">
+                    <h3 style="text-align: center; margin-bottom: 2rem; color: #2563eb;">
+                        <i class="fas fa-question-circle"></i> Frequently Asked Questions
+                    </h3>
+                    <div class="faq-container">
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <i class="fas fa-briefcase"></i>
+                                <span>What services do you offer as a data analyst?</span>
+                                <i class="fas fa-chevron-down faq-icon"></i>
+                            </div>
+                            <div class="faq-answer">
+                                I specialize in data visualization, dashboard creation and data-driven insights. I work with tools like Power BI, Python, SQL, and Excel to transform raw data into actionable business intelligence.
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <i class="fas fa-hands-helping"></i>
+                                <span>Are you available for freelance projects?</span>
+                                <i class="fas fa-chevron-down faq-icon"></i>
+                            </div>
+                            <div class="faq-answer">
+                                Yes! I'm open to freelance data analysis projects, internship opportunities, and consulting work. Feel free to reach out via email or the contact form below to discuss your project requirements.
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <i class="fas fa-clock"></i>
+                                <span>What is your typical project turnaround time?</span>
+                                <i class="fas fa-chevron-down faq-icon"></i>
+                            </div>
+                            <div class="faq-answer">
+                                Project timelines vary based on complexity and scope. Small dashboard projects typically take 3-5 days, while comprehensive analysis projects may take 1-2 weeks. I always provide realistic timelines during initial consultation.
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <i class="fas fa-tools"></i>
+                                <span>Can you work with my company's data tools?</span>
+                                <i class="fas fa-chevron-down faq-icon"></i>
+                            </div>
+                            <div class="faq-answer">
+                                I'm proficient in industry-standard tools including Power BI, Excel, SQL databases, Python, and various cloud platforms. I'm also a quick learner and can adapt to your company's specific tech stack.
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>How do you ensure data confidentiality?</span>
+                                <i class="fas fa-chevron-down faq-icon"></i>
+                            </div>
+                            <div class="faq-answer">
+                                I take data security seriously and am willing to sign NDAs. All client data is handled with strict confidentiality, and I follow industry best practices for data protection and privacy.
+                            </div>
+                        </div>
+                        <div class="faq-item">
+    <div class="faq-question">
+        <i class="fas fa-user-graduate"></i>
+        <span>Are you available for internships?</span>
+        <i class="fas fa-chevron-down faq-icon"></i>
+    </div>
+    <div class="faq-answer">
+        Yes, I am actively seeking internship opportunities in Data Analytics, Business Intelligence, and related domains. I am open to remote, hybrid, or on-site internships where I can apply my skills in Python, SQL, Power BI, and data analysis while continuing to learn and grow professionally.
+    </div>
+</div>
+
+                    </div>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="footer-content">
+                    <div class="contact-info">
+                        <h3><i class="fas fa-address-card"></i> Contact Information</h3>
+                        <p style="margin-bottom: 15px; color: #666;">I'm always open to discussing data analytics opportunities, collaborations, or just connecting with fellow data enthusiasts!</p>
+
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <strong>Email:</strong>
+                            <a href="mailto:rayeenshakib7860@gmail.com">rayeenshakib7860@gmail.com</a>
+                        </div>
+
+                        <div class="contact-item">
+                            <i class="fab fa-linkedin"></i>
+                            <strong>LinkedIn:</strong>
+                            <a href="https://www.linkedin.com/in/shahalam-rayeen-104435319" target="_blank">shahalam-rayeen</a>
+                        </div>
+
+                        <div class="contact-item">
+                            <i class="fab fa-github"></i>
+                            <strong>GitHub:</strong>
+                            <a href="https://github.com/ShahAlam0306" target="_blank">ShahAlam0306</a>
+                        </div>
+
+                        <div class="social-links">
+                            <a href="mailto:rayeenshakib7860@gmail.com" class="social-icon" title="Email">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                            <a href="https://www.linkedin.com/in/shahalam-rayeen-104435319" target="_blank" class="social-icon" title="LinkedIn">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a href="https://github.com/ShahAlam0306" target="_blank" class="social-icon" title="GitHub">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="why-hire">
+                        <h3><i class="fas fa-user-check"></i> Why Choose Me?</h3>
+                        <p style="margin-bottom: 15px;">As a passionate B.Sc IT student and aspiring Data Analyst, I bring fresh perspectives and cutting-edge knowledge:</p>
+                        <ul style="list-style: none; padding-left: 0;">
+                            <li><i class="fas fa-check-circle"></i> <strong>Academic Foundation:</strong> B.Sc IT with focus on data structures and analytics</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Quick Learner:</strong> Mastered Excel, SQL, Power BI, Python, Statistics</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Detail-Oriented:</strong> Natural curiosity to uncover hidden insights</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Continuous Growth:</strong> Regular certifications and hands-on projects</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Real Experience:</strong> Completed Deloitte Virtual Internship</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Google Form Section -->
+                <div class="contact-form-section">
+                    <h3 style="text-align: center; margin-bottom: 1.5rem; color: #2563eb;">
+                        <i class="fas fa-paper-plane"></i> Send Me a Message
+                    </h3>
+                    <p style="text-align: center; color: #666; margin-bottom: 2rem;">Have a project in mind or want to collaborate? Fill out the form below!</p>
+
+                    <iframe src="https://forms.gle/Ec7TacCY5W7s9gNq6" width="100%" height="800" frameborder="0" marginheight="0" marginwidth="0" class="google-form">
+                        Loading…
+                    </iframe>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollTopBtn" class="scroll-top-btn" title="Go to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
