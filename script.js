@@ -112,13 +112,11 @@ const certificateData = {
         issueDate: '21 Dec 2025',
         credentialId: 'SC-5ED7987C88',
         skills: [
-            'Machine Learning fundamentals for data analysis',
-            'AI-powered predictive modeling and forecasting',
-            'Natural Language Processing (NLP) for text analytics',
-            'Deep Learning applications in data science',
-            'AutoML tools and automated feature engineering',
-            'AI-driven data visualization and insights',
-            'Ethical AI and responsible data practices'
+           'Automation & AI Workflows',
+           'Python for AI-Driven Analysis',
+           'Analytical & Statistical Formulas',
+                
+           
         ],
         verifyUrl: 'https://exam.skillcourse.in/student/view_certificate?uid=SC-5ED7987C88',
         verifyText: 'Verify Certificate',
@@ -175,14 +173,28 @@ function showCertificate(certType) {
     title.textContent = cert.title;
     details.innerHTML = generateCertificateHTML(cert);
 
+    // Show modal
     modal.style.display = 'block';
+    
+    // Prevent body scroll but allow modal scroll
     document.body.style.overflow = 'hidden';
+    document.body.style.paddingRight = '15px'; // Prevent layout shift
+    
+    // Scroll to top of page first
+    window.scrollTo(0, 0);
+    
+    // Then scroll modal content to top
+    setTimeout(() => {
+        modal.scrollTop = 0;
+    }, 50);
 }
-
 function closeModal() {
     const modal = document.getElementById('certModal');
     modal.style.display = 'none';
+    
+    // Restore body scroll
     document.body.style.overflow = 'auto';
+    document.body.style.paddingRight = '0';
 }
 
 // ============================================
@@ -191,23 +203,20 @@ function closeModal() {
 
 function initScrollReveal() {
     const revealElements = document.querySelectorAll('.scroll-reveal');
-
-    // ✅ MOBILE FALLBACK (CRITICAL)
-    if (window.innerWidth <= 768) {
-        revealElements.forEach(el => {
-            el.classList.add('revealed');
-        });
-        console.log('📱 Scroll reveal disabled on mobile (forced reveal)');
-        return;
-    }
-
+    
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry, index) => {
             if (entry.isIntersecting) {
+                // Stagger animation
                 setTimeout(() => {
                     entry.target.classList.add('revealed');
                 }, index * 100);
+                
+                // Fade out when scrolling up past element
                 entry.target.dataset.revealed = 'true';
+            } else if (entry.target.dataset.revealed === 'true') {
+                // Optional: fade out when scrolling past
+                // entry.target.classList.remove('revealed');
             }
         });
     }, {
@@ -215,9 +224,12 @@ function initScrollReveal() {
         rootMargin: '0px 0px -100px 0px'
     });
 
-    revealElements.forEach(el => revealObserver.observe(el));
-}
+    revealElements.forEach(element => {
+        revealObserver.observe(element);
+    });
 
+    console.log(`✨ Scroll reveal initialized for ${revealElements.length} elements`);
+}
 
 // ============================================
 // PROJECT FILTERING
@@ -258,15 +270,6 @@ function initProjectFilters() {
     });
 
     console.log('✅ Project filters initialized');
-    // ✅ Ensure projects visible on first load
-const defaultBtn = document.querySelector('.filter-btn[data-filter="all"]');
-if (defaultBtn) {
-    defaultBtn.classList.add('active');
-}
-
-projectCards.forEach(card => card.classList.remove('hidden'));
-
-
 }
 
 // Add animation keyframes
@@ -460,18 +463,19 @@ function initImageLoading() {
 // ============================================
 
 function initParallax() {
-    // ❌ Disable parallax on mobile for performance & visibility
-    if (window.innerWidth <= 768) return;
-
     const bgPattern = document.querySelector('.bg-pattern');
+    
     if (!bgPattern) return;
 
     const handleParallax = debounce(() => {
         const scrolled = window.pageYOffset;
-        bgPattern.style.transform = `translateY(${scrolled * 0.3}px)`;
+        const rate = scrolled * 0.3;
+        
+        bgPattern.style.transform = `translateY(${rate}px)`;
     }, 10);
 
     window.addEventListener('scroll', handleParallax, { passive: true });
+    console.log('✅ Parallax effect initialized');
 }
 
 // ============================================
