@@ -115,8 +115,6 @@ const certificateData = {
            'Automation & AI Workflows',
            'Python for AI-Driven Analysis',
            'Analytical & Statistical Formulas',
-                
-           
         ],
         verifyUrl: 'https://exam.skillcourse.in/student/view_certificate?uid=SC-5ED7987C88',
         verifyText: 'Verify Certificate',
@@ -125,7 +123,7 @@ const certificateData = {
 };
 
 // ============================================
-// CERTIFICATE MODAL FUNCTIONS
+// CERTIFICATE MODAL FUNCTIONS - FIXED
 // ============================================
 
 function generateCertificateHTML(cert) {
@@ -176,18 +174,24 @@ function showCertificate(certType) {
     // Show modal
     modal.style.display = 'block';
     
-    // Prevent body scroll but allow modal scroll
+    // Prevent background scroll but allow modal scroll
     document.body.style.overflow = 'hidden';
-    document.body.style.paddingRight = '15px'; // Prevent layout shift
+    document.body.style.paddingRight = '15px';
     
-    // Scroll to top of page first
-    window.scrollTo(0, 0);
+    // Force modal to scroll to top IMMEDIATELY (no smooth scroll)
+    modal.scrollTop = 0;
     
-    // Then scroll modal content to top
-    setTimeout(() => {
-        modal.scrollTop = 0;
-    }, 50);
+    // Also try scrollTo for better browser compatibility
+    if (modal.scrollTo) {
+        modal.scrollTo(0, 0);
+    }
+    
+    // Apply focus trap
+    trapFocus(modal);
+    
+    console.log(`📜 Opened certificate: ${cert.title}`);
 }
+
 function closeModal() {
     const modal = document.getElementById('certModal');
     modal.style.display = 'none';
@@ -195,10 +199,49 @@ function closeModal() {
     // Restore body scroll
     document.body.style.overflow = 'auto';
     document.body.style.paddingRight = '0';
+    
+    console.log('✖️ Certificate modal closed');
 }
 
 // ============================================
-// SCROLL REVEAL ANIMATIONS (ISSUE #2 FIXED)
+// FOCUS TRAP FOR MODAL - ACCESSIBILITY
+// ============================================
+
+function trapFocus(modal) {
+    const focusableElements = modal.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    
+    if (focusableElements.length === 0) return;
+    
+    const firstFocusable = focusableElements[0];
+    const lastFocusable = focusableElements[focusableElements.length - 1];
+
+    // Focus first element when modal opens
+    setTimeout(() => firstFocusable.focus(), 100);
+
+    // Store the handler so we can remove it later
+    const keydownHandler = function(e) {
+        if (e.key === 'Tab') {
+            if (e.shiftKey) {
+                if (document.activeElement === firstFocusable) {
+                    lastFocusable.focus();
+                    e.preventDefault();
+                }
+            } else {
+                if (document.activeElement === lastFocusable) {
+                    firstFocusable.focus();
+                    e.preventDefault();
+                }
+            }
+        }
+    };
+
+    modal.addEventListener('keydown', keydownHandler);
+}
+
+// ============================================
+// SCROLL REVEAL ANIMATIONS
 // ============================================
 
 function initScrollReveal() {
@@ -212,11 +255,7 @@ function initScrollReveal() {
                     entry.target.classList.add('revealed');
                 }, index * 100);
                 
-                // Fade out when scrolling up past element
                 entry.target.dataset.revealed = 'true';
-            } else if (entry.target.dataset.revealed === 'true') {
-                // Optional: fade out when scrolling past
-                // entry.target.classList.remove('revealed');
             }
         });
     }, {
@@ -289,7 +328,7 @@ style.textContent = `
 document.head.appendChild(style);
 
 // ============================================
-// SMOOTH SCROLLING (ISSUE #3 FIXED)
+// SMOOTH SCROLLING
 // ============================================
 
 function initSmoothScrolling() {
@@ -315,6 +354,20 @@ function initSmoothScrolling() {
                     behavior: 'smooth'
                 });
 
+                // Close mobile menu if open
+                const nav = document.getElementById('mainNav');
+                if (nav && nav.classList.contains('active')) {
+                    nav.classList.remove('active');
+                    const hamburger = document.getElementById('hamburgerBtn');
+                    if (hamburger) {
+                        const icon = hamburger.querySelector('i');
+                        if (icon) {
+                            icon.classList.remove('fa-times');
+                            icon.classList.add('fa-bars');
+                        }
+                    }
+                }
+
                 history.pushState(null, null, href);
             }
         });
@@ -324,13 +377,60 @@ function initSmoothScrolling() {
 }
 
 // ============================================
+// MOBILE HAMBURGER MENU
+// ============================================
+
+function initMobileMenu() {
+    const hamburger = document.getElementById('hamburgerBtn');
+    const nav = document.getElementById('mainNav');
+    
+    if (!hamburger || !nav) {
+        console.log('⚠️ Mobile menu elements not found');
+        return;
+    }
+
+    hamburger.addEventListener('click', () => {
+        nav.classList.toggle('active');
+        const icon = hamburger.querySelector('i');
+        
+        if (nav.classList.contains('active')) {
+            icon.classList.remove('fa-bars');
+            icon.classList.add('fa-times');
+            document.body.style.overflow = 'hidden';
+        } else {
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+            document.body.style.overflow = 'auto';
+        }
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!nav.contains(e.target) && !hamburger.contains(e.target)) {
+            if (nav.classList.contains('active')) {
+                nav.classList.remove('active');
+                const icon = hamburger.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+                document.body.style.overflow = 'auto';
+            }
+        }
+    });
+
+    console.log('✅ Mobile menu initialized');
+}
+
+// ============================================
 // SCROLL TO TOP BUTTON
 // ============================================
 
 function initScrollToTop() {
     const scrollBtn = document.getElementById('scrollTopBtn');
     
-    if (!scrollBtn) return;
+    if (!scrollBtn) {
+        console.log('⚠️ Scroll button not found');
+        return;
+    }
 
     // Show/hide button on scroll
     window.addEventListener('scroll', () => {
@@ -368,11 +468,24 @@ function initializeFAQ() {
             // Close all FAQs
             faqItems.forEach(otherItem => {
                 otherItem.classList.remove('active');
+                const otherQuestion = otherItem.querySelector('.faq-question');
+                if (otherQuestion) {
+                    otherQuestion.setAttribute('aria-expanded', 'false');
+                }
             });
 
             // Toggle current FAQ
             if (!wasActive) {
                 item.classList.add('active');
+                question.setAttribute('aria-expanded', 'true');
+            }
+        });
+
+        // Keyboard support
+        question.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                question.click();
             }
         });
     });
@@ -396,8 +509,21 @@ function initModalListeners() {
     // Close modal on Escape key
     document.addEventListener('keydown', function (event) {
         if (event.key === 'Escape') {
-            closeModal();
+            const modal = document.getElementById('certModal');
+            if (modal && modal.style.display === 'block') {
+                closeModal();
+            }
         }
+    });
+
+    // Keyboard support for certificate cards
+    document.querySelectorAll('.certificate-card').forEach(card => {
+        card.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                card.click();
+            }
+        });
     });
 
     console.log('✅ Modal listeners initialized');
@@ -419,21 +545,45 @@ function debounce(func, wait) {
     };
 }
 
-// Lazy load images
+// Enhanced Lazy Loading with Intersection Observer
 function initLazyLoading() {
     const images = document.querySelectorAll('img[data-src]');
     
-    if (images.length === 0) return;
+    if (images.length === 0) {
+        console.log('ℹ️ No lazy-load images found');
+        return;
+    }
 
     const imageObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const img = entry.target;
-                img.src = img.dataset.src;
+                const src = img.dataset.src;
+                
+                // Add loading class
+                img.classList.add('loading');
+                
+                // Load image
+                img.src = src;
+                
+                img.onload = () => {
+                    img.classList.remove('loading');
+                    img.classList.add('loaded');
+                };
+                
+                img.onerror = () => {
+                    console.warn(`⚠️ Failed to load image: ${src}`);
+                    img.classList.remove('loading');
+                    // Show placeholder
+                    img.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 250'%3E%3Crect fill='%23e5e7eb' width='400' height='250'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='%236b7280' font-size='16' font-family='Arial'%3EImage unavailable%3C/text%3E%3C/svg%3E`;
+                };
+                
                 img.removeAttribute('data-src');
                 observer.unobserve(img);
             }
         });
+    }, {
+        rootMargin: '50px' // Start loading 50px before visible
     });
 
     images.forEach(img => imageObserver.observe(img));
@@ -458,6 +608,24 @@ function initImageLoading() {
     });
 }
 
+// Better image error handling
+function initImageErrorHandling() {
+    const images = document.querySelectorAll('img');
+    
+    images.forEach(img => {
+        img.addEventListener('error', function() {
+            // If image fails to load, show placeholder
+            if (!this.dataset.errorHandled) {
+                this.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 250'%3E%3Crect fill='%23e5e7eb' width='400' height='250'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='%236b7280' font-size='16' font-family='Arial'%3EImage unavailable%3C/text%3E%3C/svg%3E`;
+                this.dataset.errorHandled = 'true';
+                console.warn(`⚠️ Failed to load image: ${this.alt || 'Unknown'}`);
+            }
+        });
+    });
+    
+    console.log('✅ Image error handling initialized');
+}
+
 // ============================================
 // PARALLAX EFFECT FOR BACKGROUND
 // ============================================
@@ -479,47 +647,29 @@ function initParallax() {
 }
 
 // ============================================
-// TYPING ANIMATION FOR HERO (Optional)
-// ============================================
-
-function initTypingAnimation() {
-    const tagline = document.querySelector('.hero-tagline');
-    if (!tagline) return;
-
-    const text = tagline.textContent;
-    tagline.textContent = '';
-    let i = 0;
-
-    function typeWriter() {
-        if (i < text.length) {
-            tagline.textContent += text.charAt(i);
-            i++;
-            setTimeout(typeWriter, 50);
-        }
-    }
-
-    // Start typing after a delay
-    setTimeout(typeWriter, 500);
-}
-
-// ============================================
 // INITIALIZATION
 // ============================================
 
 document.addEventListener('DOMContentLoaded', function () {
     console.log('🚀 Portfolio loading...');
+    console.log('📅 Initializing features...');
 
     // Initialize all features
-    initScrollReveal();
-    initProjectFilters();
-    initSmoothScrolling();
-    initScrollToTop();
-    initializeFAQ();
-    initModalListeners();
-    initLazyLoading();
-    initImageLoading();
-    initParallax();
-    // initTypingAnimation(); // Uncomment for typing effect
+    try {
+        initScrollReveal();
+        initProjectFilters();
+        initSmoothScrolling();
+        initMobileMenu();
+        initScrollToTop();
+        initializeFAQ();
+        initModalListeners();
+        initLazyLoading();
+        initImageLoading();
+        initImageErrorHandling();
+        initParallax();
+    } catch (error) {
+        console.error('❌ Initialization error:', error);
+    }
 
     // Log performance
     window.addEventListener('load', () => {
@@ -531,11 +681,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         console.log('✅ All features initialized successfully!');
         console.log(`📜 ${Object.keys(certificateData).length} certificates available`);
+        console.log('🎨 Portfolio ready!');
     });
 
     // Add easter egg
     console.log('%c👋 Hi there! Looking for a Data Analyst?', 'font-size: 20px; color: #2563eb; font-weight: bold;');
     console.log('%cLet\'s connect! rayeenshakib7860@gmail.com', 'font-size: 14px; color: #6b7280;');
+    console.log('%c💡 Tip: Type portfolioDebug.listCertificates() to see all certificates', 'font-size: 12px; color: #9ca3af;');
 });
 
 // ============================================
@@ -553,44 +705,9 @@ function listAvailableCertificates() {
 window.portfolioDebug = {
     listCertificates: listAvailableCertificates,
     certificateData: certificateData,
-    showCertificate: showCertificate
+    showCertificate: showCertificate,
+    closeModal: closeModal,
+    version: '2.0.0'
 };
 
-// ============================================
-// ACCESSIBILITY IMPROVEMENTS
-// ============================================
-
-// Keyboard navigation for project cards
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-        const focusedElement = document.activeElement;
-        if (focusedElement.classList.contains('certificate-card')) {
-            focusedElement.click();
-        }
-    }
-});
-
-// Focus management for modal
-function trapFocus(element) {
-    const focusableElements = element.querySelectorAll(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    );
-    const firstFocusable = focusableElements[0];
-    const lastFocusable = focusableElements[focusableElements.length - 1];
-
-    element.addEventListener('keydown', function(e) {
-        if (e.key === 'Tab') {
-            if (e.shiftKey) {
-                if (document.activeElement === firstFocusable) {
-                    lastFocusable.focus();
-                    e.preventDefault();
-                }
-            } else {
-                if (document.activeElement === lastFocusable) {
-                    firstFocusable.focus();
-                    e.preventDefault();
-                }
-            }
-        }
-    });
-}
+console.log('📦 Portfolio Debug Tools loaded. Type portfolioDebug to access.');
