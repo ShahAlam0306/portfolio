@@ -1,4 +1,12 @@
 // ============================================
+// MODERN PORTFOLIO - JAVASCRIPT
+// Author: Rayeen Shahalam
+// Version: 2.0.0
+// ============================================
+
+'use strict';
+
+// ============================================
 // CERTIFICATE DATA
 // ============================================
 
@@ -112,9 +120,9 @@ const certificateData = {
         issueDate: '21 Dec 2025',
         credentialId: 'SC-5ED7987C88',
         skills: [
-           'Automation & AI Workflows',
-           'Python for AI-Driven Analysis',
-           'Analytical & Statistical Formulas',
+            'Automation & AI Workflows',
+            'Python for AI-Driven Analysis',
+            'Analytical & Statistical Formulas',
         ],
         verifyUrl: 'https://exam.skillcourse.in/student/view_certificate?uid=SC-5ED7987C88',
         verifyText: 'Verify Certificate',
@@ -123,121 +131,144 @@ const certificateData = {
 };
 
 // ============================================
-// CERTIFICATE MODAL FUNCTIONS - FIXED
+// UTILITY FUNCTIONS
 // ============================================
 
-function generateCertificateHTML(cert) {
-    const skillsList = cert.skills.map(skill => `<li>${skill}</li>`).join('');
-
-    const certificateImageHTML = cert.certificateImage ? `
-        <div class="certificate-image-container">
-            <img src="${cert.certificateImage}" 
-                 alt="${cert.title}" 
-                 onerror="this.parentElement.style.display='none'">
-        </div>
-    ` : '';
-
-    return certificateImageHTML + `
-        <p><strong>Issued by:</strong> ${cert.issuer}</p>
-        <p><strong>Issue Date:</strong> ${cert.issueDate}</p>
-        <p><strong>Credential ID:</strong> ${cert.credentialId}</p>
-        <p><strong>Skills Covered:</strong></p>
-        <ul style="text-align: left; margin-left: 20px; margin-bottom: 1.5rem;">
-            ${skillsList}
-        </ul>
-        <p style="margin-top: 1.5rem;">
-            <a href="${cert.verifyUrl}" 
-               target="_blank" 
-               class="verify-link"
-               style="background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; display: inline-block; font-weight: 600; transition: all 0.3s; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);">
-                <i class="fas fa-certificate"></i> ${cert.verifyText}
-            </a>
-        </p>
-    `;
+/**
+ * Debounce function for performance optimization
+ */
+function debounce(func, wait = 100) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
 }
 
-function showCertificate(certType) {
-    const cert = certificateData[certType];
+/**
+ * Throttle function for scroll events
+ */
+function throttle(func, limit = 100) {
+    let inThrottle;
+    return function(...args) {
+        if (!inThrottle) {
+            func.apply(this, args);
+            inThrottle = true;
+            setTimeout(() => inThrottle = false, limit);
+        }
+    };
+}
 
-    if (!cert) {
-        console.error(`Certificate "${certType}" not found`);
+/**
+ * Check if element is in viewport
+ */
+function isInViewport(element, offset = 100) {
+    const rect = element.getBoundingClientRect();
+    return (
+        rect.top <= (window.innerHeight || document.documentElement.clientHeight) - offset &&
+        rect.bottom >= 0
+    );
+}
+
+// ============================================
+// MOBILE NAVIGATION
+// ============================================
+
+function initMobileNav() {
+    const hamburger = document.getElementById('hamburgerBtn');
+    const nav = document.getElementById('mainNav');
+    const navOverlay = document.getElementById('navOverlay');
+    const navClose = document.getElementById('navCloseBtn');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    if (!hamburger || !nav || !navOverlay) {
+        console.warn('Mobile nav elements not found');
         return;
     }
 
-    const modal = document.getElementById('certModal');
-    const title = document.getElementById('certTitle');
-    const details = document.getElementById('certDetails');
-
-    title.textContent = cert.title;
-    details.innerHTML = generateCertificateHTML(cert);
-
-    // Show modal
-    modal.style.display = 'block';
-    
-    // Prevent background scroll but allow modal scroll
-    document.body.style.overflow = 'hidden';
-    document.body.style.paddingRight = '15px';
-    
-    // Force modal to scroll to top IMMEDIATELY (no smooth scroll)
-    modal.scrollTop = 0;
-    
-    // Also try scrollTo for better browser compatibility
-    if (modal.scrollTo) {
-        modal.scrollTo(0, 0);
-    }
-    
-    // Apply focus trap
-    trapFocus(modal);
-    
-    console.log(`📜 Opened certificate: ${cert.title}`);
-}
-
-function closeModal() {
-    const modal = document.getElementById('certModal');
-    modal.style.display = 'none';
-    
-    // Restore body scroll
-    document.body.style.overflow = 'auto';
-    document.body.style.paddingRight = '0';
-    
-    console.log('✖️ Certificate modal closed');
-}
-
-// ============================================
-// FOCUS TRAP FOR MODAL - ACCESSIBILITY
-// ============================================
-
-function trapFocus(modal) {
-    const focusableElements = modal.querySelectorAll(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    );
-    
-    if (focusableElements.length === 0) return;
-    
-    const firstFocusable = focusableElements[0];
-    const lastFocusable = focusableElements[focusableElements.length - 1];
-
-    // Focus first element when modal opens
-    setTimeout(() => firstFocusable.focus(), 100);
-
-    // Store the handler so we can remove it later
-    const keydownHandler = function(e) {
-        if (e.key === 'Tab') {
-            if (e.shiftKey) {
-                if (document.activeElement === firstFocusable) {
-                    lastFocusable.focus();
-                    e.preventDefault();
-                }
-            } else {
-                if (document.activeElement === lastFocusable) {
-                    firstFocusable.focus();
-                    e.preventDefault();
-                }
-            }
+    // Toggle mobile menu
+    function toggleMenu(show) {
+        const isOpen = show !== undefined ? show : !nav.classList.contains('active');
+        
+        if (isOpen) {
+            nav.classList.add('active');
+            navOverlay.classList.add('active');
+            hamburger.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            hamburger.setAttribute('aria-expanded', 'true');
+        } else {
+            nav.classList.remove('active');
+            navOverlay.classList.remove('active');
+            hamburger.classList.remove('active');
+            document.body.style.overflow = '';
+            hamburger.setAttribute('aria-expanded', 'false');
         }
-    };
+    }
 
-    modal.addEventListener('keydown', keydownHandler);
+    // Event listeners
+    hamburger.addEventListener('click', () => toggleMenu());
+    navOverlay.addEventListener('click', () => toggleMenu(false));
+    if (navClose) navClose.addEventListener('click', () => toggleMenu(false));
+
+    // Close menu when clicking nav links
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                toggleMenu(false);
+            }
+        });
+    });
+
+    // Close menu on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && nav.classList.contains('active')) {
+            toggleMenu(false);
+        }
+    });
+
+    console.log('✅ Mobile navigation initialized');
+}
+
+// ============================================
+// SMOOTH SCROLLING
+// ============================================
+
+function initSmoothScroll() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            const href = this.getAttribute('href');
+            
+            // Skip if href is just '#' or empty
+            if (!href || href === '#') return;
+
+            const target = document.querySelector(href);
+            if (!target) return;
+
+            e.preventDefault();
+
+            const headerOffset = 100;
+            const elementPosition = target.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
+
+            // Update URL without jumping
+            history.pushState(null, null, href);
+
+            // Set focus for accessibility
+            target.setAttribute('tabindex', '-1');
+            target.focus();
+        });
+    });
+
+    console.log('✅ Smooth scrolling initialized');
 }
 
 // ============================================
@@ -247,27 +278,32 @@ function trapFocus(modal) {
 function initScrollReveal() {
     const revealElements = document.querySelectorAll('.scroll-reveal');
     
-    const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry, index) => {
-            if (entry.isIntersecting) {
-                // Stagger animation
-                setTimeout(() => {
-                    entry.target.classList.add('revealed');
-                }, index * 100);
-                
-                entry.target.dataset.revealed = 'true';
+    if (revealElements.length === 0) {
+        console.log('ℹ️ No scroll reveal elements found');
+        return;
+    }
+
+    // Use Intersection Observer for better performance
+    const observerOptions = {
+        threshold: 0.15,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !entry.target.classList.contains('revealed')) {
+                entry.target.classList.add('revealed');
+                // Stop observing once revealed
+                observer.unobserve(entry.target);
             }
         });
-    }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px -100px 0px'
-    });
+    }, observerOptions);
 
     revealElements.forEach(element => {
-        revealObserver.observe(element);
+        observer.observe(element);
     });
 
-    console.log(`✨ Scroll reveal initialized for ${revealElements.length} elements`);
+    console.log(`✅ Scroll reveal initialized for ${revealElements.length} elements`);
 }
 
 // ============================================
@@ -278,46 +314,53 @@ function initProjectFilters() {
     const filterButtons = document.querySelectorAll('.filter-btn');
     const projectCards = document.querySelectorAll('.project-card');
 
+    if (filterButtons.length === 0 || projectCards.length === 0) {
+        console.log('ℹ️ Project filters not found');
+        return;
+    }
+
     filterButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const filter = button.getAttribute('data-filter');
+        button.addEventListener('click', function() {
+            const filter = this.getAttribute('data-filter');
 
             // Update active button
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
+            filterButtons.forEach(btn => {
+                btn.classList.remove('active');
+                btn.setAttribute('aria-pressed', 'false');
+            });
+            this.classList.add('active');
+            this.setAttribute('aria-pressed', 'true');
 
-            // Filter projects with animation
+            // Filter projects
+            let visibleCount = 0;
             projectCards.forEach((card, index) => {
-                const categories = card.getAttribute('data-category');
-                
-                if (card.classList.contains('coming-soon')) {
-                    card.classList.remove('hidden');
-                    return;
-                }
+                const categories = card.getAttribute('data-category') || '';
+                const isComingSoon = card.classList.contains('coming-soon-card');
 
-                if (filter === 'all' || (categories && categories.includes(filter))) {
+                if (filter === 'all' || categories.includes(filter) || isComingSoon) {
                     card.classList.remove('hidden');
                     // Stagger animation
-                    card.style.animation = `fadeInScale 0.5s ease-out ${index * 0.1}s both`;
+                    card.style.animation = `fadeInScale 0.5s ease-out ${visibleCount * 0.05}s both`;
+                    visibleCount++;
                 } else {
                     card.classList.add('hidden');
                 }
             });
 
-            console.log(`🔍 Filtered by: ${filter}`);
+            console.log(`🔍 Filtered projects: ${filter} (${visibleCount} visible)`);
         });
     });
 
     console.log('✅ Project filters initialized');
 }
 
-// Add animation keyframes
+// Add animation keyframes dynamically
 const style = document.createElement('style');
 style.textContent = `
     @keyframes fadeInScale {
         from {
             opacity: 0;
-            transform: scale(0.9) translateY(20px);
+            transform: scale(0.95) translateY(20px);
         }
         to {
             opacity: 1;
@@ -328,141 +371,68 @@ style.textContent = `
 document.head.appendChild(style);
 
 // ============================================
-// SMOOTH SCROLLING
+// LAZY LOADING IMAGES
 // ============================================
 
-function initSmoothScrolling() {
-    // Enhanced smooth scroll for navigation links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            const href = this.getAttribute('href');
-
-            if (href === '#' || href === 'javascript:void(0)') {
-                return;
-            }
-
-            e.preventDefault();
-            const target = document.querySelector(href);
-
-            if (target) {
-                const headerOffset = 20;
-                const elementPosition = target.getBoundingClientRect().top;
-                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: 'smooth'
-                });
-
-                // Close mobile menu if open
-                const nav = document.getElementById('mainNav');
-                if (nav && nav.classList.contains('active')) {
-                    nav.classList.remove('active');
-                    const hamburger = document.getElementById('hamburgerBtn');
-                    if (hamburger) {
-                        const icon = hamburger.querySelector('i');
-                        if (icon) {
-                            icon.classList.remove('fa-times');
-                            icon.classList.add('fa-bars');
-                        }
-                    }
-                }
-
-                history.pushState(null, null, href);
-            }
-        });
-    });
-
-    console.log('✅ Smooth scrolling initialized');
-}
-
-// ============================================
-// MOBILE HAMBURGER MENU
-// ============================================
-
-function initMobileMenu() {
-    const hamburger = document.getElementById('hamburgerBtn');
-    const nav = document.getElementById('mainNav');
+function initLazyLoading() {
+    const images = document.querySelectorAll('img[data-src]');
     
-    if (!hamburger || !nav) {
-        console.log('⚠️ Mobile menu elements not found');
+    if (images.length === 0) {
+        console.log('ℹ️ No lazy-load images found');
         return;
     }
 
-    hamburger.addEventListener('click', () => {
-        nav.classList.toggle('active');
-        const icon = hamburger.querySelector('i');
-        
-        if (nav.classList.contains('active')) {
-            icon.classList.remove('fa-bars');
-            icon.classList.add('fa-times');
-            document.body.style.overflow = 'hidden';
-        } else {
-            icon.classList.remove('fa-times');
-            icon.classList.add('fa-bars');
-            document.body.style.overflow = 'auto';
-        }
-    });
-
-    // Close menu when clicking outside
-    document.addEventListener('click', (e) => {
-        if (!nav.contains(e.target) && !hamburger.contains(e.target)) {
-            if (nav.classList.contains('active')) {
-                nav.classList.remove('active');
-                const icon = hamburger.querySelector('i');
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
-                document.body.style.overflow = 'auto';
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                const src = img.dataset.src;
+                
+                img.classList.add('loading');
+                img.src = src;
+                
+                img.onload = () => {
+                    img.classList.remove('loading');
+                    img.classList.add('loaded');
+                    img.removeAttribute('data-src');
+                };
+                
+                img.onerror = () => {
+                    console.warn(`⚠️ Failed to load image: ${src}`);
+                    img.classList.remove('loading');
+                    // Keep placeholder
+                };
+                
+                observer.unobserve(img);
             }
-        }
-    });
-
-    console.log('✅ Mobile menu initialized');
-}
-
-// ============================================
-// SCROLL TO TOP BUTTON
-// ============================================
-
-function initScrollToTop() {
-    const scrollBtn = document.getElementById('scrollTopBtn');
-    
-    if (!scrollBtn) {
-        console.log('⚠️ Scroll button not found');
-        return;
-    }
-
-    // Show/hide button on scroll
-    window.addEventListener('scroll', () => {
-        if (window.pageYOffset > 300) {
-            scrollBtn.classList.add('visible');
-        } else {
-            scrollBtn.classList.remove('visible');
-        }
-    }, { passive: true });
-
-    // Scroll to top on click
-    scrollBtn.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
         });
+    }, {
+        rootMargin: '50px'
     });
 
-    console.log('✅ Scroll to top button initialized');
+    images.forEach(img => imageObserver.observe(img));
+    
+    console.log(`✅ Lazy loading initialized for ${images.length} images`);
 }
 
 // ============================================
 // FAQ FUNCTIONALITY
 // ============================================
 
-function initializeFAQ() {
+function initFAQ() {
     const faqItems = document.querySelectorAll('.faq-item');
+
+    if (faqItems.length === 0) {
+        console.log('ℹ️ No FAQ items found');
+        return;
+    }
 
     faqItems.forEach(item => {
         const question = item.querySelector('.faq-question');
+        
+        if (!question) return;
 
-        question.addEventListener('click', () => {
+        question.addEventListener('click', function() {
             const wasActive = item.classList.contains('active');
 
             // Close all FAQs
@@ -490,29 +460,112 @@ function initializeFAQ() {
         });
     });
 
-    console.log('✅ FAQ functionality initialized');
+    console.log(`✅ FAQ functionality initialized for ${faqItems.length} items`);
 }
 
 // ============================================
-// MODAL EVENT LISTENERS
+// CERTIFICATE MODAL
 // ============================================
 
-function initModalListeners() {
-    // Close modal when clicking outside
-    window.onclick = function (event) {
-        const modal = document.getElementById('certModal');
-        if (event.target === modal) {
-            closeModal();
-        }
+/**
+ * Generate HTML for certificate details
+ */
+function generateCertificateHTML(cert) {
+    const skillsList = cert.skills.map(skill => `<li>${skill}</li>`).join('');
+
+    const certificateImageHTML = cert.certificateImage ? `
+        <div style="margin: 1.5rem 0; border-radius: 1rem; overflow: hidden; border: 1px solid #e5e7eb;">
+            <img src="${cert.certificateImage}" 
+                 alt="${cert.title}" 
+                 style="width: 100%; height: auto; display: block;"
+                 onerror="this.parentElement.style.display='none'">
+        </div>
+    ` : '';
+
+    return certificateImageHTML + `
+        <p style="margin-bottom: 1rem;"><strong>Issued by:</strong> ${cert.issuer}</p>
+        <p style="margin-bottom: 1rem;"><strong>Issue Date:</strong> ${cert.issueDate}</p>
+        <p style="margin-bottom: 1rem;"><strong>Credential ID:</strong> ${cert.credentialId}</p>
+        <p style="margin-bottom: 0.5rem;"><strong>Skills Covered:</strong></p>
+        <ul style="margin: 0 0 1.5rem 1.5rem; line-height: 1.8;">
+            ${skillsList}
+        </ul>
+        <p style="margin-top: 1.5rem;">
+            <a href="${cert.verifyUrl}" 
+               target="_blank" 
+               class="verify-link">
+                <i class="fas fa-certificate"></i>
+                <span>${cert.verifyText}</span>
+            </a>
+        </p>
+    `;
+}
+
+/**
+ * Show certificate modal
+ */
+function showCertificate(certType) {
+    const cert = certificateData[certType];
+
+    if (!cert) {
+        console.error(`Certificate "${certType}" not found`);
+        return;
     }
 
-    // Close modal on Escape key
-    document.addEventListener('keydown', function (event) {
-        if (event.key === 'Escape') {
-            const modal = document.getElementById('certModal');
-            if (modal && modal.style.display === 'block') {
-                closeModal();
-            }
+    const modal = document.getElementById('certModal');
+    const title = document.getElementById('certTitle');
+    const details = document.getElementById('certDetails');
+
+    if (!modal || !title || !details) {
+        console.error('Modal elements not found');
+        return;
+    }
+
+    title.textContent = cert.title;
+    details.innerHTML = generateCertificateHTML(cert);
+
+    // Show modal
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+    
+    // Set focus to close button for accessibility
+    const closeBtn = modal.querySelector('.modal-close');
+    if (closeBtn) {
+        setTimeout(() => closeBtn.focus(), 100);
+    }
+
+    console.log(`📜 Opened certificate: ${cert.title}`);
+}
+
+/**
+ * Close certificate modal
+ */
+function closeModal() {
+    const modal = document.getElementById('certModal');
+    
+    if (!modal) return;
+
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
+    
+    console.log('✖️ Certificate modal closed');
+}
+
+/**
+ * Initialize certificate modal event listeners
+ */
+function initCertificateModal() {
+    const modal = document.getElementById('certModal');
+    
+    if (!modal) {
+        console.warn('Certificate modal not found');
+        return;
+    }
+
+    // Close on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('show')) {
+            closeModal();
         }
     });
 
@@ -526,188 +579,216 @@ function initModalListeners() {
         });
     });
 
-    console.log('✅ Modal listeners initialized');
+    console.log('✅ Certificate modal initialized');
 }
 
+// Make functions globally accessible for onclick handlers
+window.showCertificate = showCertificate;
+window.closeModal = closeModal;
+
 // ============================================
-// PERFORMANCE OPTIMIZATIONS
+// SCROLL TO TOP BUTTON
 // ============================================
 
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
-
-// Enhanced Lazy Loading with Intersection Observer
-function initLazyLoading() {
-    const images = document.querySelectorAll('img[data-src]');
+function initScrollToTop() {
+    const scrollBtn = document.getElementById('scrollTopBtn');
     
-    if (images.length === 0) {
-        console.log('ℹ️ No lazy-load images found');
+    if (!scrollBtn) {
+        console.warn('Scroll to top button not found');
         return;
     }
 
-    const imageObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const img = entry.target;
-                const src = img.dataset.src;
-                
-                // Add loading class
-                img.classList.add('loading');
-                
-                // Load image
-                img.src = src;
-                
-                img.onload = () => {
-                    img.classList.remove('loading');
-                    img.classList.add('loaded');
-                };
-                
-                img.onerror = () => {
-                    console.warn(`⚠️ Failed to load image: ${src}`);
-                    img.classList.remove('loading');
-                    // Show placeholder
-                    img.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 250'%3E%3Crect fill='%23e5e7eb' width='400' height='250'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='%236b7280' font-size='16' font-family='Arial'%3EImage unavailable%3C/text%3E%3C/svg%3E`;
-                };
-                
-                img.removeAttribute('data-src');
-                observer.unobserve(img);
-            }
-        });
-    }, {
-        rootMargin: '50px' // Start loading 50px before visible
-    });
-
-    images.forEach(img => imageObserver.observe(img));
-    console.log(`✅ Lazy loading initialized for ${images.length} images`);
-}
-
-// Add loading animation for images
-function initImageLoading() {
-    const images = document.querySelectorAll('.project-image img, .profile-img');
-    
-    images.forEach(img => {
-        if (!img.complete) {
-            img.style.opacity = '0';
-            img.style.transition = 'opacity 0.5s ease';
-            
-            img.addEventListener('load', function() {
-                setTimeout(() => {
-                    this.style.opacity = '1';
-                }, 100);
-            });
+    // Show/hide button based on scroll position
+    const handleScroll = throttle(() => {
+        if (window.pageYOffset > 300) {
+            scrollBtn.classList.add('visible');
+        } else {
+            scrollBtn.classList.remove('visible');
         }
-    });
-}
+    }, 100);
 
-// Better image error handling
-function initImageErrorHandling() {
-    const images = document.querySelectorAll('img');
-    
-    images.forEach(img => {
-        img.addEventListener('error', function() {
-            // If image fails to load, show placeholder
-            if (!this.dataset.errorHandled) {
-                this.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 250'%3E%3Crect fill='%23e5e7eb' width='400' height='250'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='%236b7280' font-size='16' font-family='Arial'%3EImage unavailable%3C/text%3E%3C/svg%3E`;
-                this.dataset.errorHandled = 'true';
-                console.warn(`⚠️ Failed to load image: ${this.alt || 'Unknown'}`);
-            }
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    // Scroll to top on click
+    scrollBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
         });
     });
-    
-    console.log('✅ Image error handling initialized');
+
+    console.log('✅ Scroll to top button initialized');
 }
 
 // ============================================
-// PARALLAX EFFECT FOR BACKGROUND
+// PERFORMANCE MONITORING
 // ============================================
 
-function initParallax() {
-    const bgPattern = document.querySelector('.bg-pattern');
-    
-    if (!bgPattern) return;
+function logPerformance() {
+    if (!window.performance) return;
 
-    const handleParallax = debounce(() => {
-        const scrolled = window.pageYOffset;
-        const rate = scrolled * 0.3;
-        
-        bgPattern.style.transform = `translateY(${rate}px)`;
-    }, 10);
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            const perfData = performance.timing;
+            const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
+            const connectTime = perfData.responseEnd - perfData.requestStart;
+            const renderTime = perfData.domComplete - perfData.domLoading;
 
-    window.addEventListener('scroll', handleParallax, { passive: true });
-    console.log('✅ Parallax effect initialized');
+            console.log('⚡ Performance Metrics:');
+            console.log(`   Page Load Time: ${pageLoadTime}ms`);
+            console.log(`   Server Connection: ${connectTime}ms`);
+            console.log(`   DOM Rendering: ${renderTime}ms`);
+
+            // Log certificate count
+            console.log(`📜 ${Object.keys(certificateData).length} certificates loaded`);
+        }, 0);
+    });
+}
+
+// ============================================
+// ERROR HANDLING
+// ============================================
+
+function setupErrorHandling() {
+    // Global error handler
+    window.addEventListener('error', (e) => {
+        console.error('❌ Error:', e.message);
+    });
+
+    // Promise rejection handler
+    window.addEventListener('unhandledrejection', (e) => {
+        console.error('❌ Unhandled Promise Rejection:', e.reason);
+    });
 }
 
 // ============================================
 // INITIALIZATION
 // ============================================
 
-document.addEventListener('DOMContentLoaded', function () {
-    console.log('🚀 Portfolio loading...');
-    console.log('📅 Initializing features...');
+function init() {
+    console.log('🚀 Portfolio initializing...');
+    console.log('📅 Version 2.0.0');
 
-    // Initialize all features
     try {
+        // Setup error handling first
+        setupErrorHandling();
+
+        // Initialize all features
+        initMobileNav();
+        initSmoothScroll();
         initScrollReveal();
         initProjectFilters();
-        initSmoothScrolling();
-        initMobileMenu();
-        initScrollToTop();
-        initializeFAQ();
-        initModalListeners();
         initLazyLoading();
-        initImageLoading();
-        initImageErrorHandling();
-        initParallax();
+        initFAQ();
+        initCertificateModal();
+        initScrollToTop();
+        logPerformance();
+
+        console.log('✅ All features initialized successfully!');
+        console.log('🎨 Portfolio ready!');
+        
+        // Easter egg
+        console.log('%c👋 Hi there! Looking for a Data Analyst?', 
+            'font-size: 20px; color: #6366f1; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.2);');
+        console.log('%cLet\'s connect! rayeenshakib7860@gmail.com', 
+            'font-size: 14px; color: #94a3b8;');
+        console.log('%c💡 Type portfolioDebug() in console for debug tools', 
+            'font-size: 12px; color: #64748b;');
+        
     } catch (error) {
         console.error('❌ Initialization error:', error);
     }
-
-    // Log performance
-    window.addEventListener('load', () => {
-        if (window.performance) {
-            const perfData = window.performance.timing;
-            const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
-            console.log(`⚡ Page loaded in ${pageLoadTime}ms`);
-        }
-
-        console.log('✅ All features initialized successfully!');
-        console.log(`📜 ${Object.keys(certificateData).length} certificates available`);
-        console.log('🎨 Portfolio ready!');
-    });
-
-    // Add easter egg
-    console.log('%c👋 Hi there! Looking for a Data Analyst?', 'font-size: 20px; color: #2563eb; font-weight: bold;');
-    console.log('%cLet\'s connect! rayeenshakib7860@gmail.com', 'font-size: 14px; color: #6b7280;');
-    console.log('%c💡 Tip: Type portfolioDebug.listCertificates() to see all certificates', 'font-size: 12px; color: #9ca3af;');
-});
-
-// ============================================
-// UTILITY FUNCTIONS
-// ============================================
-
-function listAvailableCertificates() {
-    console.log('📜 Available Certificates:');
-    Object.entries(certificateData).forEach(([key, cert]) => {
-        console.log(`  - ${key}: ${cert.title}`);
-    });
 }
 
-// Export for debugging
-window.portfolioDebug = {
-    listCertificates: listAvailableCertificates,
-    certificateData: certificateData,
-    showCertificate: showCertificate,
-    closeModal: closeModal,
-    version: '2.0.0'
+// ============================================
+// DEBUG TOOLS
+// ============================================
+
+window.portfolioDebug = function() {
+    console.log('🔧 Portfolio Debug Tools');
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    console.log('Available Commands:');
+    console.log('  portfolioDebug.certificates - List all certificates');
+    console.log('  portfolioDebug.testModal(id) - Test certificate modal');
+    console.log('  portfolioDebug.version - Show version');
+    console.log('  portfolioDebug.reveal() - Force reveal all elements');
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    
+    return {
+        certificates: () => {
+            console.log('📜 Available Certificates:');
+            Object.entries(certificateData).forEach(([key, cert]) => {
+                console.log(`  - ${key}: ${cert.title}`);
+            });
+        },
+        testModal: (id) => {
+            if (certificateData[id]) {
+                showCertificate(id);
+            } else {
+                console.error(`Certificate "${id}" not found`);
+            }
+        },
+        version: '2.0.0',
+        reveal: () => {
+            document.querySelectorAll('.scroll-reveal').forEach(el => {
+                el.classList.add('revealed');
+            });
+            console.log('✅ All elements revealed');
+        },
+        data: certificateData
+    };
 };
 
-console.log('📦 Portfolio Debug Tools loaded. Type portfolioDebug to access.');
+// ============================================
+// START APPLICATION
+// ============================================
+
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+} else {
+    // DOM is already loaded
+    init();
+}
+// ============================================
+// AUTO HIDE NAV ON SCROLL
+// ============================================
+
+function initAutoHideNav() {
+    const nav = document.getElementById('mainNav');
+    if (!nav) return;
+
+    let lastScrollY = window.scrollY;
+
+    window.addEventListener('scroll', () => {
+        const currentScrollY = window.scrollY;
+
+        if (currentScrollY > lastScrollY && currentScrollY > 100) {
+            // Scrolling down
+            nav.style.transform = 'translate(-50%, -120px)';
+        } else {
+            // Scrolling up
+            nav.style.transform = 'translate(-50%, 0)';
+        }
+
+        lastScrollY = currentScrollY;
+    }, { passive: true });
+
+    console.log('✅ Auto hide nav initialized');
+}
+function initNavAfterHero() {
+    const nav = document.getElementById('mainNav');
+    const hero = document.getElementById('home');
+
+    if (!nav || !hero) return;
+
+    window.addEventListener('scroll', () => {
+        const heroBottom = hero.offsetHeight;
+
+        if (window.scrollY > heroBottom - 100) {
+            nav.classList.add('visible');
+        } else {
+            nav.classList.remove('visible');
+        }
+    });
+}
