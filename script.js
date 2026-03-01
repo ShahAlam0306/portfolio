@@ -792,3 +792,65 @@ function initNavAfterHero() {
         }
     });
 }
+function initMobileNav() {
+    const hamburger = document.getElementById('hamburgerBtn');
+    const nav = document.getElementById('mainNav');
+    const navOverlay = document.getElementById('navOverlay');
+    const navClose = document.getElementById('navCloseBtn');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    if (!hamburger || !nav || !navOverlay) {
+        console.warn('Mobile nav elements not found');
+        return;
+    }
+
+    // Toggle mobile menu
+    function toggleMenu(show) {
+        const isOpen = show !== undefined ? show : !nav.classList.contains('active');
+        
+        if (isOpen) {
+            nav.classList.add('active');
+            navOverlay.classList.add('active');
+            hamburger.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            hamburger.setAttribute('aria-expanded', 'true');
+        } else {
+            nav.classList.remove('active');
+            navOverlay.classList.remove('active');
+            hamburger.classList.remove('active');
+            document.body.style.overflow = '';
+            hamburger.setAttribute('aria-expanded', 'false');
+        }
+    }
+
+    // Event listeners
+    hamburger.addEventListener('click', () => toggleMenu());
+    navOverlay.addEventListener('click', () => toggleMenu(false));
+    if (navClose) navClose.addEventListener('click', () => toggleMenu(false));
+
+    // Close menu when clicking nav links (with delay for smooth scroll)
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            // Let the smooth scroll happen, then close menu
+            setTimeout(() => {
+                toggleMenu(false);
+            }, 100);
+        });
+    });
+
+    // Close menu on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && nav.classList.contains('active')) {
+            toggleMenu(false);
+        }
+    });
+
+    // Close menu when resizing to desktop
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768 && nav.classList.contains('active')) {
+            toggleMenu(false);
+        }
+    });
+
+    console.log('✅ Mobile navigation initialized');
+}
