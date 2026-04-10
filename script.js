@@ -43,7 +43,7 @@ const certificateData = {
         ],
         verifyUrl: 'https://www.theforage.com/completion-certificates/ifobHAoMjQs9s6bKS/gMTdCXwDdLYoXZ3wG_ifobHAoMjQs9s6bKS_ZEzT9757QizCW4zwN_1753116198832_completion_certificate.pdf',
         verifyText: 'View Certificate',
-        certificateImage: 'projects\Gen_AI_TATA.jpg'
+        certificateImage: 'projects/Gen_AI_TATA.jpg'
     },
     excel: {
         title: 'Microsoft Excel - Advanced Certification',
