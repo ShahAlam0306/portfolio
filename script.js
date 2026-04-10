@@ -26,7 +26,7 @@ const certificateData = {
         ],
         verifyUrl: 'https://www.theforage.com/completion-certificates/9PBTqmSxAf6zZTseP/io9DzWKe3PTsiS6GG_9PBTqmSxAf6zZTseP_ZEzT9757QizCW4zwN_1760593205337_completion_certificate.pdf',
         verifyText: 'View Certificate',
-        certificateImage: 'assets/certificates/deloitte-cert.jpg'
+        certificateImage: 'projects/deloitte-cert.jpg'
     },
     TATA: {
         title: 'GenAI Powered Data Analytics',
