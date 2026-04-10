@@ -28,7 +28,23 @@ const certificateData = {
         verifyText: 'View Certificate',
         certificateImage: 'assets/certificates/deloitte-cert.jpg'
     },
-
+    TATA: {
+        title: 'GenAI Powered Data Analytics',
+        issuer: 'GenAI Powered Data Analytics via Forage',
+        issueDate: 'July 21st, 2025',
+        credentialId: ' ZEzT9757QizCW4zwN ',
+        skills: [
+            'AI Analytics',
+            'Business Communication',
+            'Exploratory Data Analysis',
+            'Predictive Analytics',
+            'Communicating analytical insights',
+            'Decision Making'
+        ],
+        verifyUrl: 'https://www.theforage.com/completion-certificates/ifobHAoMjQs9s6bKS/gMTdCXwDdLYoXZ3wG_ifobHAoMjQs9s6bKS_ZEzT9757QizCW4zwN_1753116198832_completion_certificate.pdf',
+        verifyText: 'View Certificate',
+        certificateImage: 'projects\Gen_AI_TATA.jpg'
+    },
     excel: {
         title: 'Microsoft Excel - Advanced Certification',
         issuer: 'Microsoft / SkillCourse',
