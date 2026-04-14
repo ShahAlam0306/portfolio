@@ -301,10 +301,15 @@ function initScrollReveal() {
 
     // Use Intersection Observer for better performance
     const observerOptions = {
-        threshold: 0.15,
-        rootMargin: '0px 0px -50px 0px'
-    };
-
+    threshold: 0.05,
+    rootMargin: '0px'
+};
+// Fallback for mobile
+if (window.innerWidth <= 768) {
+    document.querySelectorAll('.scroll-reveal').forEach(el => {
+        el.classList.add('revealed');
+    });
+}
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting && !entry.target.classList.contains('revealed')) {
