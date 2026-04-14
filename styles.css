@@ -2109,3 +2109,9 @@ a:focus-visible {
         display: flex;
     }
 }
+@media (max-width: 768px) {
+    .scroll-reveal {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
